@@ -5,7 +5,7 @@
     <div style="border:1px solid #ddd;padding:12px;border-radius:6px;">
       <div>
         <label>Customer name</label>
-        <input v-model="customer" placeholder="Customer" />
+        <input v-model="customer.value" placeholder="Customer" />
       </div>
 
       <h3>Items</h3>
@@ -48,14 +48,17 @@ import { reactive, computed } from 'vue'
 import axios from 'axios'
 
 const customer = reactive({ value: '' })
-const items = reactive([{ description: '', qty: 1, unitPrice: 0 }])
-
-function addItem() {
+//const items = reactive([{ description: '', qty: 1, unitPrice: 0 }])
+const items =reactive([{ description: '', qty: 1, unitPrice: 0 }]) 
+function addItem() {console.log(items);
   items.push({ description: '', qty: 1, unitPrice: 0 })
+  
 }
 
 function removeItem(idx) {
+    console.log('Removing item at index:', idx);
   items.splice(idx, 1)
+    console.log('Current items:', items);
 }
 
 const subtotal = computed(() =>

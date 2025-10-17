@@ -1,9 +1,11 @@
 package com.invoice.controllers;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.invoice.entities.InvoiceDto;
 import com.invoice.entities.Item;
 import com.invoice.repositories.InvoiceRepo;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 
 /**
  * REST Controller for managing invoices.
@@ -23,7 +29,7 @@ import com.invoice.repositories.InvoiceRepo;
  */
 @RestController
 @RequestMapping("/api/invoices")
-@CrossOrigin(origins = "*") // Allow frontend (Vue) access from different port
+@CrossOrigin(origins = "*") // 
 public class InvoiceController {
 
     private final InvoiceRepo invoiceRepository;
@@ -87,5 +93,51 @@ public class InvoiceController {
     @DeleteMapping("/{id}")
     public void deleteInvoice(@PathVariable Long id) {
         invoiceRepository.deleteById(id);
+    }
+    
+    @GetMapping("/{id}/pdf")
+    public ResponseEntity<byte[]> downloadInvoicePdf(@PathVariable Long id) {
+        Optional<InvoiceDto> optionalInvoice = invoiceRepository.findById(id);
+        if (optionalInvoice == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        InvoiceDto invoice = optionalInvoice.get();
+
+        try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            Document document = new Document();
+            PdfWriter.getInstance(document, out);
+            document.open();
+
+            document.add(new Paragraph("Invoice #" + invoice.getId()));
+            document.add(new Paragraph("Customer: " + invoice.getCustomer()));
+            document.add(new Paragraph("Subtotal: ₹" + invoice.getSubtotal()));
+            document.add(new Paragraph("\nItems:"));
+
+            PdfPTable table = new PdfPTable(3);
+            table.addCell("Description");
+            table.addCell("Quantity");
+            table.addCell("Unit Price");
+
+            for (Item item : invoice.getItems()) {
+                table.addCell(item.getDescription());
+                table.addCell(String.valueOf(item.getQty()));
+                table.addCell("₹" + item.getUnitPrice());
+            }
+
+            document.add(table);
+            document.close();
+
+            byte[] pdfBytes = out.toByteArray();
+
+            return ResponseEntity.ok()
+                    .header("Content-Disposition", "attachment; filename=invoice-" + id + ".pdf")
+                    .contentType(org.springframework.http.MediaType.APPLICATION_PDF)
+                    .body(pdfBytes);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
     }
 }

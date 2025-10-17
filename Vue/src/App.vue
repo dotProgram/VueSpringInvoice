@@ -1,11 +1,11 @@
-<template>
-<main style="font-family: Arial, Helvetica, sans-serif; max-width:900px;margin:24px auto;">
+<template style="margin-top:50%;">
+<main style="font-family: Arial, Helvetica, sans-serif; margin:24px; margin-top:70%;">
 <h1>Invoice Generator</h1>
-<div style="display:flex;gap:24px;">
+<div  style="display:flex;gap:24px;">
 <div style="flex:1;">
 <InvoiceForm @saved="fetchInvoices" />
 </div>
-<div style="width:360px;">
+<div style="width:360px; overflow: scroll;">
 <InvoiceList :invoices="invoices" />
 </div>
 </div>
