@@ -5,8 +5,8 @@
 <div style="flex:1;">
 <InvoiceForm @saved="fetchInvoices" />
 </div>
-<div style="width:360px; overflow: scroll;">
-<InvoiceList :invoices="invoices" />
+<div style="width:500px;">
+<InvoiceList :invoices="invoices" style="overflow: scroll; max-height: 800px;"/>
 </div>
 </div>
 </main>
