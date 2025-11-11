@@ -77,6 +77,7 @@ async function saveInvoice() {
   }
 
   try {
+    await axios.post('https://16106724752e.ngrok-free.app/api/invoices', payload)
     alert('Invoice saved!')
   } catch (e) {
     console.error(e)
