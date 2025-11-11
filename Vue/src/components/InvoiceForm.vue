@@ -77,7 +77,6 @@ async function saveInvoice() {
   }
 
   try {
-    await axios.post('http://localhost:8087/api/invoices', payload)
     alert('Invoice saved!')
   } catch (e) {
     console.error(e)

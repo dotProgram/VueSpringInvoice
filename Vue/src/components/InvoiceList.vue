@@ -55,7 +55,7 @@ const loading = ref(true);
  */
 const fetchInvoices = async () => {
   try {
-    const response = await axios.get("http://localhost:8087/api/invoices");
+    const response = await axios.get("https://16106724752e.ngrok-free.app/api/invoices");
     invoices.value = response.data || [];
   } catch (error) {
     console.error("Error fetching invoices:", error);
@@ -70,7 +70,7 @@ const fetchInvoices = async () => {
  */
 const downloadInvoicePdf = async (id) => {
   try {
-    const response = await axios.get(`http://localhost:8087/api/invoices/${id}/pdf`, {
+    const response = await axios.get(`https://16106724752e.ngrok-free.app/api/invoices/${id}/pdf`, {
       responseType: "blob", // Important for binary data
     });
 
