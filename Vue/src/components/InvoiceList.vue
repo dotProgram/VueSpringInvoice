@@ -1,12 +1,12 @@
 <template>
   <div class="p-4">
-    <h2 class="text-xl font-bold mb-4">Invoice List</h2>
+    <h2 class="text-xl font-bold mb-4" style="text-align: center;">Invoice List</h2>
 
     <!-- Loader -->
     <p v-if="loading" class="text-gray-500 italic">Loading invoices...</p>
 
     <!-- Show invoices if available -->
-    <div v-else-if="invoices && invoices.length">
+    <div v-else-if="invoices && invoices.length" style="text-align: center;">
       <div
         v-for="inv in invoices"
         :key="inv.id"
