@@ -7,17 +7,27 @@
 
     <!-- Show invoices if available -->
     <div v-else-if="invoices && invoices.length" style="text-align: center;">
-      <div
-        v-for="inv in invoices"
-        :key="inv.id"
-        class="border rounded-lg bg-gray-50 shadow-sm p-4 mb-4"
-      >
-        <h3 class="text-lg font-semibold mb-1">
-          Customer: {{ inv.customer }}
-        </h3>
-        <p class="mb-2"><strong>Subtotal:</strong> ₹{{ inv.subtotal.toFixed(2) }}</p>
+      <table class="table" style="width:100%;">
+    <thead>
+      <tr>       <th>Customer Name <!--<h3></h3>--></th> 
+        <th>Subtotal<!--<h3></h3>--></th>
+        <th>Items<!--<h3></h3>--></th>
+         <th>Download<!--<h3></h3>--></th> 
+      </tr>
+    </thead>
+    <tbody>
+      
+      
+      <tr  v-for="inv in invoices"
+        :key="inv.id"><td>
+        <p class="mb-2">
+          {{ inv.customer }}
+        </p></td>
 
+       <td>
+        <p class="mb-2"><strong></strong> ₹{{ inv.subtotal.toFixed(2) }}</p></td>
         <!-- Items List -->
+        <td>
         <details class="mb-2">
           <summary>Items ({{ inv.items?.length || 0 }})</summary>
           <ul v-if="inv.items && inv.items.length" class="ml-5 mt-2 list-disc">
@@ -27,20 +37,24 @@
           </ul>
           <p v-else class="text-gray-500 italic mt-2">No items found</p>
         </details>
-
+</td>
         <!-- Download PDF Button -->
+         <td>
         <button
           @click="downloadInvoicePdf(inv.id)"
-          class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-        >
+          class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
           📄 Download PDF
-        </button>
-      </div>
-    </div>
+        </button></td></tr>  </tbody>
+         </table> 
+      </div>  <p v-else class="text-gray-500 italic">No invoices available</p>
+   
 
+     
+     </div>
+ 
     <!-- If no invoices -->
-    <p v-else class="text-gray-500 italic">No invoices available</p>
-  </div>
+    
+  <!-- </div> -->
 </template>
 
 <script setup>
